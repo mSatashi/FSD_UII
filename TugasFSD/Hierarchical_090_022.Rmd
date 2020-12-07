@@ -1,0 +1,31 @@
+---
+title: "Game Sales Clustering with Hierarchical"
+output: html_notebook
+---
+
+
+```{r}
+game <- read.csv("data/Video_Games_Sales_as_at_22_Dec_2016.csv")
+summary(game)
+```
+
+```{r}
+df <- data.frame(States=rownames(game), game)
+par(las=2) # make label text perpendicular to axis
+par(mar=c(5,8,4,2)) # increase y-axis margin.
+barplot(df$Global_Sales, names.arg = df$Name, horiz = TRUE, cex.names = 0.5, xlab = "Global Sales per Game")
+```
+
+
+
+```{r}
+head(df)
+```
+
+```{r}
+df <- scale(df[,7:9])
+d <- dist(df, method = "euclidean")
+clusters <- hclust(d, method = "complete" )
+plot(clusters, cex = 0.6, hang = -1)
+```
+

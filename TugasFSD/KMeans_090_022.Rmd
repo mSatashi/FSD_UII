@@ -1,0 +1,53 @@
+---
+title: "Game Sales Clustering with K means"
+output: html_notebook
+---
+
+Assalamualaikum wr wb 
+Kali ini kita akan mencoba mengerjakan 
+
+```{r}
+game <- read.csv("data/Video_Games_Sales_as_at_22_Dec_2016.csv")
+head(game)
+summary(game)
+```
+
+
+```{r}
+game.new<-game[,6:10]
+head(game.new)
+```
+
+```{r}
+game.class<-game[,"Genre"]
+set.seed(1)
+res <- kmeans(game.new,7)
+```
+
+
+```{r}
+par(mfrow=c(2,2), mar=c(5,4,2,2))
+plot(game.new[, c(1,5)], col=res$cluster)
+plot(game.new[, c(1,5)], col=game.class)
+plot(game.new[, c(2,5)], col=res$cluster)
+plot(game.new[, c(2,5)], col=game.class)
+```
+
+```{r}
+res$tot.withinss
+```
+
+```{r}
+attributes(res)$names
+```
+
+```{r}
+game.new$cluster <- factor(res$cluster)
+centers <- as.data.frame(res$centers)
+library(ggplot2)
+ggplot() + 
+  geom_point(data=game.new, aes(x=NA_Sales, y=EU_Sales,color=cluster))  +
+  geom_point(data=centers, aes(x=NA_Sales, y=EU_Sales, color="Center"), 
+             size=52, alpha=.3, show.legend = FALSE)
+```
+

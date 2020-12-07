@@ -1,0 +1,50 @@
+---
+title: "Game Sales Clustering with DBScan"
+output: html_notebook
+---
+```{r}
+library(factoextra)
+game <- read.csv("data/Video_Games_Sales_as_at_22_Dec_2016.csv")
+df <- game[, 6:7]
+```
+
+```{r}
+plot(df, pch=16)
+```
+
+
+```{r}
+set.seed(123)
+km.res <- kmeans(df, 5, nstart = 25)
+fviz_cluster(km.res, df, frame = FALSE, geom = "ellipse")
+```
+
+
+```{r}
+library("fpc")
+set.seed(123)
+db <- dbscan(df, eps = 0.13, MinPts = 5)
+plot(db, df, main = "DBSCAN", frame = FALSE)
+```
+
+```{r}
+library("factoextra")
+fviz_cluster(db, df, stand = FALSE, frame = FALSE, geom = "ellipse")
+```
+
+
+```{r}
+print(db)
+```
+
+```{r}
+db$cluster
+```
+
+
+```{r}
+library(dbscan)
+kNNdistplot(df, k =  5)
+abline(h = 0.13, lty = 2)
+```
+
